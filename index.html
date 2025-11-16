@@ -14,8 +14,8 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background: linear-gradient(to right top, #ffd9eb, #ffebf7, #e0ffe0); /* Degradado suave y romántico */
-            font-family: 'Playfair Display', serif; /* Fuente más elegante */
+            background: linear-gradient(to right top, #ffd9eb, #ffebf7, #e0ffe0);
+            font-family: 'Playfair Display', serif;
             overflow: hidden;
             position: relative;
         }
@@ -25,13 +25,17 @@
             border-radius: 25px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
             padding: 50px;
-            max-width: 550px;
+            max-width: 550px; /* Ancho máximo para escritorio */
             text-align: center;
             position: relative;
             z-index: 10;
-            animation: fadeInScale 1.8s ease-out forwards; /* Animación de aparición */
-            border: 4px solid #f06292; /* Borde rosa más profundo */
-            box-sizing: border-box; /* Incluye padding y borde en el ancho/alto */
+            animation: fadeInScale 1.8s ease-out forwards;
+            border: 4px solid #f06292;
+            box-sizing: border-box; /* Fundamental para que el padding y borde no desborden */
+            
+            /* AJUSTE PARA MÓVILES: Garantiza que haya márgenes laterales */
+            width: 90%; 
+            margin: 20px auto;
         }
 
         /* Animación de aparición de la tarjeta */
@@ -41,27 +45,40 @@
         }
 
         .message-title {
-            font-family: 'Dancing Script', cursive; /* Fuente cursiva para el título */
-            color: #d81b60; /* Rosa oscuro intenso */
+            font-family: 'Dancing Script', cursive;
+            color: #d81b60;
             font-size: 3.2em;
             line-height: 1.2;
             margin-bottom: 25px;
-            text-shadow: 2px 2px 6px rgba(255, 192, 203, 0.8); /* Sombra suave */
+            text-shadow: 2px 2px 6px rgba(255, 192, 203, 0.8);
         }
 
         .message-body {
             font-family: 'Playfair Display', serif;
-            color: #4a148c; /* Morado elegante */
+            color: #4a148c;
             font-size: 1.4em;
             line-height: 1.6;
             margin-top: 20px;
             font-style: italic;
         }
 
+        /* Ajuste de tamaño de fuente para pantallas muy pequeñas */
+        @media (max-width: 400px) {
+            .message-title {
+                font-size: 2.5em;
+            }
+            .message-body {
+                font-size: 1.2em;
+            }
+            .card {
+                padding: 30px;
+            }
+        }
+
         /* Estilos para los corazones flotantes */
         .heart {
             position: absolute;
-            width: 35px; /* Más grandes */
+            width: 35px;
             height: 35px;
             background-color: white;
             transform: rotate(-45deg);
@@ -82,19 +99,19 @@
         }
 
         .heart::before {
-            top: -17.5px; /* Ajuste para el nuevo tamaño */
+            top: -17.5px;
             left: 0;
         }
 
         .heart::after {
-            left: 17.5px; /* Ajuste para el nuevo tamaño */
+            left: 17.5px;
             top: 0;
         }
 
         /* Estilos para los girasoles flotantes */
         .sunflower {
             position: absolute;
-            width: 60px; /* Más grandes */
+            width: 60px;
             height: 60px;
             z-index: 5;
             opacity: 0.9;
@@ -135,10 +152,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const body = document.body;
-            const numHearts = 35; // Más corazones
-            const numSunflowers = 12; // Girasoles
+            const numHearts = 35; 
+            const numSunflowers = 12; 
 
-            // SVG del girasol mejorado
+            // SVG del girasol mejorado y detallado
             const sunflowerSVG = `
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
                     <path fill="#FFD700" d="M50,0 Q60,20 80,10 Q70,40 100,50 Q80,60 90,80 Q60,70 50,100 Q40,80 20,90 Q30,60 0,50 Q20,40 10,20 Q40,30 50,0 Z"/>
@@ -167,7 +184,7 @@
             for (let i = 0; i < numSunflowers; i++) {
                 const sunflower = document.createElement('div');
                 sunflower.classList.add('sunflower');
-                sunflower.innerHTML = sunflowerSVG; // Inserta el SVG dentro del div
+                sunflower.innerHTML = sunflowerSVG; 
                 
                 sunflower.style.left = `${Math.random() * 100}vw`;
                 sunflower.style.top = `${Math.random() * 100}vh`;
