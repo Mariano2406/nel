@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi Luz y Girasol</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right top, #ffd9eb, #ffebf7, #e0ffe0); /* Degradado suave y romántico */
+            font-family: 'Playfair Display', serif; /* Fuente más elegante */
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+            padding: 50px;
+            max-width: 550px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            animation: fadeInScale 1.8s ease-out forwards; /* Animación de aparición */
+            border: 4px solid #f06292; /* Borde rosa más profundo */
+            box-sizing: border-box; /* Incluye padding y borde en el ancho/alto */
+        }
+
+        /* Animación de aparición de la tarjeta */
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.7) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .message-title {
+            font-family: 'Dancing Script', cursive; /* Fuente cursiva para el título */
+            color: #d81b60; /* Rosa oscuro intenso */
+            font-size: 3.2em;
+            line-height: 1.2;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 6px rgba(255, 192, 203, 0.8); /* Sombra suave */
+        }
+
+        .message-body {
+            font-family: 'Playfair Display', serif;
+            color: #4a148c; /* Morado elegante */
+            font-size: 1.4em;
+            line-height: 1.6;
+            margin-top: 20px;
+            font-style: italic;
+        }
+
+        /* Estilos para los corazones flotantes */
+        .heart {
+            position: absolute;
+            width: 35px; /* Más grandes */
+            height: 35px;
+            background-color: white;
+            transform: rotate(-45deg);
+            z-index: 5;
+            opacity: 0.85;
+            animation: floatHeart 12s infinite ease-in-out;
+            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background-color: white;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -17.5px; /* Ajuste para el nuevo tamaño */
+            left: 0;
+        }
+
+        .heart::after {
+            left: 17.5px; /* Ajuste para el nuevo tamaño */
+            top: 0;
+        }
+
+        /* Estilos para los girasoles flotantes */
+        .sunflower {
+            position: absolute;
+            width: 60px; /* Más grandes */
+            height: 60px;
+            z-index: 5;
+            opacity: 0.9;
+            animation: floatSunflower 15s infinite ease-in-out;
+            filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.2));
+        }
+
+        /* Animación para los corazones */
+        @keyframes floatHeart {
+            0% { transform: translateY(0) rotate(-45deg) scale(1); opacity: 0.85; }
+            50% { transform: translateY(-70px) rotate(-55deg) scale(1.15); opacity: 1; }
+            100% { transform: translateY(0) rotate(-45deg) scale(1); opacity: 0.85; }
+        }
+
+        /* Animación para los girasoles */
+        @keyframes floatSunflower {
+            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.9; }
+            50% { transform: translateY(-90px) scale(1.1) rotate(15deg); opacity: 1; }
+            100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.9; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <p class="message-title">
+            Mi Dulce Girasol, mi Eterna Primavera 🌸
+        </p>
+        <p class="message-body">
+            En el jardín de mi vida, tu amor es el girasol más radiante,
+            siempre buscando la luz, llenando cada rincón con tu brillo.
+            Contigo, cada instante es un poema, un sueño hecho realidad.
+            Eres el latido que mi alma anhela.
+            <br>
+            Con todo mi amor, para ti. ❤️
+        </p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const numHearts = 35; // Más corazones
+            const numSunflowers = 12; // Girasoles
+
+            // SVG del girasol mejorado
+            const sunflowerSVG = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                    <path fill="#FFD700" d="M50,0 Q60,20 80,10 Q70,40 100,50 Q80,60 90,80 Q60,70 50,100 Q40,80 20,90 Q30,60 0,50 Q20,40 10,20 Q40,30 50,0 Z"/>
+                    <path fill="#FFC107" d="M50,10 Q60,25 75,20 Q70,45 90,50 Q75,55 80,75 Q55,70 50,90 Q45,70 20,75 Q30,55 10,50 Q25,45 20,25 Q45,30 50,10 Z"/>
+                    <circle cx="50" cy="50" r="25" fill="#8B4513"/>
+                    <circle cx="50" cy="50" r="18" fill="#A0522D"/>
+                    <circle cx="50" cy="50" r="10" fill="#CD853F"/>
+                </svg>
+            `;
+
+            // Crear y animar corazones
+            for (let i = 0; i < numHearts; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.top = `${Math.random() * 100}vh`;
+                
+                heart.style.animationDelay = `${Math.random() * 12}s`;
+                heart.style.animationDuration = `${8 + Math.random() * 8}s`; 
+
+                body.appendChild(heart);
+            }
+
+            // Crear y animar girasoles
+            for (let i = 0; i < numSunflowers; i++) {
+                const sunflower = document.createElement('div');
+                sunflower.classList.add('sunflower');
+                sunflower.innerHTML = sunflowerSVG; // Inserta el SVG dentro del div
+                
+                sunflower.style.left = `${Math.random() * 100}vw`;
+                sunflower.style.top = `${Math.random() * 100}vh`;
+
+                sunflower.style.animationDelay = `${Math.random() * 12}s`;
+                sunflower.style.animationDuration = `${10 + Math.random() * 10}s`;
+
+                body.appendChild(sunflower);
+            }
+        });
+    </script>
+</body>
+</html>
