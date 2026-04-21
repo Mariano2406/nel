@@ -1,200 +1,549 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para mi Luz y Girasol</title>
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#d4465a"/>
+  <title>Para ti 💌</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background: linear-gradient(to right top, #ffd9eb, #ffebf7, #e0ffe0);
-            font-family: 'Playfair Display', serif;
-            overflow: hidden;
-            position: relative;
-        }
+    :root {
+      --rose:  #d4465a;
+      --blush: #f7c5cc;
+      --cream: #fdf6f0;
+      --ink:   #2b1a1a;
+      --gold:  #c9973a;
+    }
 
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 25px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
-            padding: 50px;
-            max-width: 550px; /* Ancho máximo para escritorio */
-            text-align: center;
-            position: relative;
-            z-index: 10;
-            animation: fadeInScale 1.8s ease-out forwards;
-            border: 4px solid #f06292;
-            box-sizing: border-box; /* Fundamental para que el padding y borde no desborden */
-            
-            /* AJUSTE PARA MÓVILES: Garantiza que haya márgenes laterales */
-            width: 90%; 
-            margin: 20px auto;
-        }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      background: var(--cream);
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--ink);
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        /* Animación de aparición de la tarjeta */
-        @keyframes fadeInScale {
-            0% { opacity: 0; transform: scale(0.7) translateY(20px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
+    /* ── Partículas ── */
+    #particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .particle {
+      position: absolute;
+      animation: floatUp linear infinite;
+      opacity: 0; pointer-events: none;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
+      8%   { opacity: .6; }
+      92%  { opacity: .4; }
+      100% { transform: translateY(-12vh) rotate(400deg); opacity: 0; }
+    }
 
-        .message-title {
-            font-family: 'Dancing Script', cursive;
-            color: #d81b60;
-            font-size: 3.2em;
-            line-height: 1.2;
-            margin-bottom: 25px;
-            text-shadow: 2px 2px 6px rgba(255, 192, 203, 0.8);
-        }
+    /* ══════════════════════════════
+       PANTALLA INICIO
+    ══════════════════════════════ */
+    #start-screen {
+      position: fixed; inset: 0; z-index: 100;
+      background: radial-gradient(ellipse at 50% 55%, #fce8ee 0%, #fce9d5 55%, #fdf6f0 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 1.8rem; padding: 2rem;
+      transition: opacity .8s ease, visibility .8s;
+    }
+    #start-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-        .message-body {
-            font-family: 'Playfair Display', serif;
-            color: #4a148c;
-            font-size: 1.4em;
-            line-height: 1.6;
-            margin-top: 20px;
-            font-style: italic;
-        }
+    /* Sobre */
+    .envelope-wrap { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .envelope {
+      width: min(260px, 72vw);
+      aspect-ratio: 1.65;
+      position: relative;
+      filter: drop-shadow(0 14px 36px rgba(212,70,90,.28));
+      transition: transform .3s;
+    }
+    .envelope-wrap:active .envelope { transform: scale(.96); }
 
-        /* Ajuste de tamaño de fuente para pantallas muy pequeñas */
-        @media (max-width: 400px) {
-            .message-title {
-                font-size: 2.5em;
-            }
-            .message-body {
-                font-size: 1.2em;
-            }
-            .card {
-                padding: 30px;
-            }
-        }
+    .env-body {
+      width: 100%; height: 100%;
+      background: linear-gradient(145deg, #fff5f8, #ffe4ec);
+      border-radius: 6px;
+      border: 1.5px solid var(--blush);
+      position: relative; overflow: hidden;
+    }
+    .env-body::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(45deg, transparent, transparent 9px,
+        rgba(212,70,90,.04) 9px, rgba(212,70,90,.04) 10px);
+    }
+    .env-flap {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 55%;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      background: linear-gradient(160deg, #f9c5d0, #f0a0b0);
+      transform-origin: top center;
+      transition: transform .55s cubic-bezier(.4,0,.2,1);
+    }
+    .flap-open { transform: rotateX(-170deg); }
+    .env-seal {
+      position: absolute; left: 50%; top: 28%;
+      transform: translate(-50%,-50%);
+      font-size: clamp(1.8rem, 7vw, 2.4rem); z-index: 2;
+      transition: opacity .25s;
+    }
+    .seal-hide { opacity: 0; }
+    .env-lines {
+      position: absolute; bottom: 18%; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; gap: 5px; width: 52%;
+    }
+    .env-line { height: 2px; border-radius: 2px; background: rgba(212,70,90,.18); }
 
-        /* Estilos para los corazones flotantes */
-        .heart {
-            position: absolute;
-            width: 35px;
-            height: 35px;
-            background-color: white;
-            transform: rotate(-45deg);
-            z-index: 5;
-            opacity: 0.85;
-            animation: floatHeart 12s infinite ease-in-out;
-            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
-        }
+    #start-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.25rem, 5.5vw, 1.9rem);
+      font-style: italic; color: var(--rose);
+      text-align: center; line-height: 1.35;
+      animation: glow 2.6s ease-in-out infinite;
+    }
+    @keyframes glow {
+      0%,100% { opacity:1; text-shadow: none; }
+      50%      { opacity:.65; text-shadow: 0 0 18px rgba(212,70,90,.3); }
+    }
 
-        .heart::before,
-        .heart::after {
-            content: '';
-            position: absolute;
-            width: 35px;
-            height: 35px;
-            background-color: white;
-            border-radius: 50%;
-        }
+    .open-btn {
+      padding: .85rem 2.6rem;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(.95rem, 4vw, 1.05rem);
+      letter-spacing: .08em; color: #fff;
+      background: linear-gradient(135deg, var(--rose), #b03050);
+      border: none; border-radius: 50px; cursor: pointer;
+      box-shadow: 0 8px 28px rgba(212,70,90,.38);
+      transition: transform .15s, box-shadow .15s;
+      min-width: 200px;
+    }
+    .open-btn:active { transform: scale(.96); box-shadow: 0 4px 16px rgba(212,70,90,.35); }
 
-        .heart::before {
-            top: -17.5px;
-            left: 0;
-        }
+    /* ══════════════════════════════
+       CARTA
+    ══════════════════════════════ */
+    #letter-container {
+      min-height: 100vh;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 3rem 1rem 5rem;
+      position: relative; z-index: 1;
+      opacity: 0; transform: translateY(36px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    #letter-container.visible { opacity: 1; transform: translateY(0); }
 
-        .heart::after {
-            left: 17.5px;
-            top: 0;
-        }
+    .letter-paper {
+      background: #fff;
+      max-width: 640px; width: 100%;
+      padding: clamp(1.8rem, 7vw, 3.5rem) clamp(1.6rem, 7vw, 4rem);
+      border-radius: 4px;
+      box-shadow:
+        0 2px 8px rgba(0,0,0,.06),
+        0 18px 55px rgba(212,70,90,.12),
+        inset 0 0 0 1px rgba(212,70,90,.07);
+      position: relative;
+    }
+    .letter-paper::before {
+      content: '';
+      position: absolute; inset: 0; border-radius: 4px;
+      background: repeating-linear-gradient(transparent, transparent 27px, rgba(212,70,90,.055) 28px);
+      pointer-events: none;
+    }
+    .letter-paper::after {
+      content: '❧';
+      position: absolute; right: 1.4rem; bottom: 1.4rem;
+      font-size: 5rem; color: rgba(212,70,90,.06);
+      pointer-events: none; line-height: 1;
+    }
 
-        /* Estilos para los girasoles flotantes */
-        .sunflower {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            z-index: 5;
-            opacity: 0.9;
-            animation: floatSunflower 15s infinite ease-in-out;
-            filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.2));
-        }
+    .corner {
+      position: absolute; width: 32px; height: 32px;
+      border-color: var(--blush); border-style: solid;
+    }
+    .corner.tl { top:10px; left:10px;  border-width:2px 0 0 2px; }
+    .corner.tr { top:10px; right:10px; border-width:2px 2px 0 0; }
+    .corner.bl { bottom:10px; left:10px;  border-width:0 0 2px 2px; }
+    .corner.br { bottom:10px; right:10px; border-width:0 2px 2px 0; }
 
-        /* Animación para los corazones */
-        @keyframes floatHeart {
-            0% { transform: translateY(0) rotate(-45deg) scale(1); opacity: 0.85; }
-            50% { transform: translateY(-70px) rotate(-55deg) scale(1.15); opacity: 1; }
-            100% { transform: translateY(0) rotate(-45deg) scale(1); opacity: 0.85; }
-        }
+    .letter-date {
+      font-size: .82rem; color: var(--gold);
+      letter-spacing: .12em; text-transform: uppercase;
+      margin-bottom: 1.8rem; text-align: right;
+    }
+    .letter-greeting {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 5.5vw, 2rem);
+      font-style: italic; color: var(--rose);
+      margin-bottom: 1.6rem; line-height: 1.3;
+    }
 
-        /* Animación para los girasoles */
-        @keyframes floatSunflower {
-            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.9; }
-            50% { transform: translateY(-90px) scale(1.1) rotate(15deg); opacity: 1; }
-            100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.9; }
-        }
-    </style>
+    .letter-body p {
+      font-size: clamp(1rem, 3.8vw, 1.1rem);
+      line-height: 2;
+      color: #3a2020;
+      margin-bottom: 1.3rem;
+      opacity: 0; transform: translateY(14px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .letter-body p.revealed { opacity: 1; transform: translateY(0); }
+
+    .highlight {
+      color: var(--rose); font-style: italic;
+      border-bottom: 1px dotted rgba(212,70,90,.4);
+      cursor: default;
+    }
+
+    /* ── Sección de cualidades ── */
+    .qualities-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(.9rem, 3.5vw, 1rem);
+      color: var(--gold); letter-spacing: .1em;
+      text-align: center; margin: 2rem 0 1rem;
+    }
+    .qualities-title::before, .qualities-title::after { content: '— '; color: var(--blush); }
+
+    .qualities-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .7rem; margin-bottom: 1.8rem;
+    }
+    .quality-card {
+      background: linear-gradient(135deg, #fff5f7, #fff0ec);
+      border: 1.5px solid var(--blush);
+      border-radius: 8px;
+      padding: .9rem .8rem;
+      display: flex; align-items: center; gap: .6rem;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s, background .2s;
+      -webkit-tap-highlight-color: transparent;
+      position: relative; overflow: hidden;
+    }
+    .quality-card:active,
+    .quality-card.tapped {
+      transform: scale(.97);
+      background: linear-gradient(135deg, #ffe0e6, #ffeae4);
+      box-shadow: 0 4px 18px rgba(212,70,90,.18);
+    }
+    .quality-card .qicon { font-size: 1.5rem; flex-shrink: 0; }
+    .quality-card .qtext {
+      font-size: clamp(.8rem, 3.2vw, .88rem);
+      color: #5a2a2a; line-height: 1.35;
+    }
+    .quality-card .qtext strong {
+      display: block; color: var(--rose);
+      font-size: clamp(.85rem, 3.4vw, .95rem);
+      margin-bottom: .1rem;
+    }
+    /* corazón que aparece al tocar */
+    .quality-card .pop-heart {
+      position: absolute; right: .6rem; top: .4rem;
+      font-size: 1.1rem; opacity: 0;
+      transform: scale(0) rotate(-20deg);
+      transition: opacity .3s, transform .3s;
+    }
+    .quality-card.tapped .pop-heart { opacity: 1; transform: scale(1) rotate(0deg); }
+
+    /* ── Corazón ── */
+    .heartbeat-section { text-align: center; margin: 1.6rem 0 .8rem; }
+    .big-heart {
+      font-size: clamp(3rem, 12vw, 4rem);
+      display: inline-block; cursor: pointer;
+      animation: heartbeat 1.3s ease-in-out infinite;
+      user-select: none; -webkit-user-select: none;
+    }
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      14%      { transform: scale(1.22); }
+      28%      { transform: scale(1); }
+      42%      { transform: scale(1.13); }
+      56%      { transform: scale(1); }
+    }
+    .heart-counter {
+      font-size: clamp(.82rem, 3.2vw, .9rem);
+      color: var(--rose); margin-top: .5rem;
+      letter-spacing: .05em; min-height: 1.2em;
+      opacity: 0; transition: opacity .4s;
+    }
+    .heart-counter.show { opacity: 1; }
+
+    /* ── Firma ── */
+    .letter-closing {
+      margin-top: 2rem;
+      font-family: 'Playfair Display', serif;
+      font-style: italic; color: var(--ink);
+      font-size: clamp(.95rem, 3.5vw, 1rem);
+      line-height: 2;
+    }
+    .letter-signature {
+      font-size: clamp(1.3rem, 5.5vw, 1.8rem);
+      color: var(--rose);
+    }
+
+    /* ── Confetti ── */
+    .confetti-piece {
+      position: fixed; top: -12px;
+      width: 7px; height: 13px; border-radius: 2px;
+      animation: confettiFall linear forwards;
+      pointer-events: none; z-index: 200;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(0) rotate(0deg);    opacity: 1; }
+      100% { transform: translateY(110vh) rotate(700deg); opacity: 0; }
+    }
+
+    /* ── Botón final ── */
+    .final-btn {
+      display: block; margin: 2.2rem auto 0;
+      padding: .9rem 2.4rem;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 4vw, 1.1rem);
+      font-style: italic; color: #fff;
+      background: linear-gradient(135deg, var(--rose), #b03050);
+      border: none; border-radius: 50px; cursor: pointer;
+      box-shadow: 0 8px 28px rgba(212,70,90,.38);
+      transition: transform .15s, box-shadow .15s;
+      width: 100%; max-width: 300px;
+    }
+    .final-btn:active { transform: scale(.96); }
+
+    #magic-message {
+      text-align: center; margin-top: 1.4rem;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(.95rem, 3.8vw, 1.15rem);
+      font-style: italic; color: var(--rose);
+      line-height: 1.55; padding: 0 .5rem;
+      opacity: 0; transform: scale(.92);
+      transition: opacity .6s, transform .6s;
+      min-height: 2.5em;
+    }
+    #magic-message.show { opacity: 1; transform: scale(1); }
+  </style>
 </head>
 <body>
-    <div class="card">
-        <p class="message-title">
-            Mi Dulce Girasol, mi Eterna Primavera 🌸
-        </p>
-        <p class="message-body">
-            En el jardín de mi vida, tu amor es el girasol más radiante,
-            siempre buscando la luz, llenando cada rincón con tu brillo.
-            Contigo, cada instante es un poema, un sueño hecho realidad.
-            Eres el latido que mi alma anhela.
-            <br>
-            Con todo mi amor, para ti. ❤️
-        </p>
+
+<div id="particles"></div>
+
+<!-- ── PANTALLA INICIO ── -->
+<div id="start-screen">
+  <div class="envelope-wrap" id="envelope-btn">
+    <div class="envelope" id="envelope">
+      <div class="env-body">
+        <div class="env-flap" id="env-flap"></div>
+        <span class="env-seal" id="env-seal">💌</span>
+        <div class="env-lines">
+          <div class="env-line"></div>
+          <div class="env-line" style="width:68%"></div>
+          <div class="env-line" style="width:42%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p id="start-title">Hay algo esperándote aquí... 🌹</p>
+  <button class="open-btn" id="open-btn">Abrir mi carta 💌</button>
+</div>
+
+<!-- ── CARTA ── -->
+<div id="letter-container">
+  <div class="letter-paper">
+    <div class="corner tl"></div><div class="corner tr"></div>
+    <div class="corner bl"></div><div class="corner br"></div>
+
+    <p class="letter-date" id="letter-date"></p>
+    <h1 class="letter-greeting">Mi amor,</h1>
+
+    <div class="letter-body" id="body1">
+      <p>Hay cosas que a veces no sé cómo decirte con palabras, cosas que se me quedan atoradas en la garganta porque siento que ninguna frase alcanza para describir lo que significas para mí. Pero hoy quiero intentarlo.</p>
+
+      <p>Quiero que sepas que <span class="highlight">no me pienso rendir contigo</span>. Ni por los problemas, ni por las dificultades, ni por los momentos en que la vida se pone difícil. Porque lo que tenemos vale cada obstáculo, y porque cada vez que pienso en rendirme, pienso en ti — y se me olvida hasta la razón por la que dudé.</p>
+
+      <p>Te amo. No como algo que simplemente siento, sino como algo que <span class="highlight">elijo cada día</span>. Con todo lo que eso implica.</p>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const body = document.body;
-            const numHearts = 35; 
-            const numSunflowers = 12; 
+    <!-- Cualidades -->
+    <p class="qualities-title">Lo que admiro de ti</p>
+    <div class="qualities-grid" id="qualities-grid"></div>
 
-            // SVG del girasol mejorado y detallado
-            const sunflowerSVG = `
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-                    <path fill="#FFD700" d="M50,0 Q60,20 80,10 Q70,40 100,50 Q80,60 90,80 Q60,70 50,100 Q40,80 20,90 Q30,60 0,50 Q20,40 10,20 Q40,30 50,0 Z"/>
-                    <path fill="#FFC107" d="M50,10 Q60,25 75,20 Q70,45 90,50 Q75,55 80,75 Q55,70 50,90 Q45,70 20,75 Q30,55 10,50 Q25,45 20,25 Q45,30 50,10 Z"/>
-                    <circle cx="50" cy="50" r="25" fill="#8B4513"/>
-                    <circle cx="50" cy="50" r="18" fill="#A0522D"/>
-                    <circle cx="50" cy="50" r="10" fill="#CD853F"/>
-                </svg>
-            `;
+    <div class="letter-body" id="body2">
+      <p>Eres una persona <span class="highlight">increíblemente fuerte</span>. He visto cómo enfrentas lo que se te pone enfrente sin doblegarte, cómo te levantas cuando todo pesa, cómo sonríes incluso cuando por dentro la cosa está dura. Eso no lo hace cualquiera. Eso lo hace alguien especial. Y esa persona eres tú.</p>
 
-            // Crear y animar corazones
-            for (let i = 0; i < numHearts; i++) {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-                
-                heart.style.left = `${Math.random() * 100}vw`;
-                heart.style.top = `${Math.random() * 100}vh`;
-                
-                heart.style.animationDelay = `${Math.random() * 12}s`;
-                heart.style.animationDuration = `${8 + Math.random() * 8}s`; 
+      <p>Y lo que más me asombra es que todo aquello que te propones, <span class="highlight">lo logras</span>. No porque todo sea fácil — sino porque tú no te detienes. Tienes una determinación que me inspira, que me recuerda que yo también puedo.</p>
 
-                body.appendChild(heart);
-            }
+      <p>Eres la persona más especial que ha llegado a mi vida. No lo digo por decirlo — lo digo porque lo siento en cada momento que paso contigo, en cada vez que te miro y pienso que soy muy afortunado de tenerte aquí.</p>
+    </div>
 
-            // Crear y animar girasoles
-            for (let i = 0; i < numSunflowers; i++) {
-                const sunflower = document.createElement('div');
-                sunflower.classList.add('sunflower');
-                sunflower.innerHTML = sunflowerSVG; 
-                
-                sunflower.style.left = `${Math.random() * 100}vw`;
-                sunflower.style.top = `${Math.random() * 100}vh`;
+    <!-- Corazón -->
+    <div class="heartbeat-section">
+      <div class="big-heart" id="big-heart">❤️</div>
+      <p class="heart-counter" id="heart-counter"></p>
+    </div>
 
-                sunflower.style.animationDelay = `${Math.random() * 12}s`;
-                sunflower.style.animationDuration = `${10 + Math.random() * 10}s`;
+    <div class="letter-body" id="body3">
+      <p>Sé que el camino no siempre es perfecto. Sé que hay días difíciles. Pero también sé que <span class="highlight">contigo quiero recorrerlo</span>, con todo y sus curvas, porque estar a tu lado es lo que más me llena.</p>
 
-                body.appendChild(sunflower);
-            }
-        });
-    </script>
+      <p>Así que aquí estoy. Sin rendirme. Queriéndote. Admirándote. Orgulloso de ti y de lo nuestro.</p>
+    </div>
+
+    <div class="letter-closing">
+      Con todo mi amor, siempre,<br/>
+      <span class="letter-signature">El que nunca se rinde por ti 🌹</span>
+    </div>
+
+    <button class="final-btn" id="final-btn">💕 Enviar todo mi amor</button>
+    <p id="magic-message"></p>
+  </div>
+</div>
+
+<script>
+  /* Fecha */
+  const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const now = new Date();
+  document.getElementById('letter-date').textContent =
+    `${now.getDate()} de ${months[now.getMonth()]} de ${now.getFullYear()}`;
+
+  /* Partículas */
+  const syms = ['🌸','🌺','💮','🌷','💗','💕','✦','·','❀','˚','✿'];
+  const pc = document.getElementById('particles');
+  for (let i = 0; i < 24; i++) {
+    const p = document.createElement('span');
+    p.className = 'particle';
+    p.textContent = syms[Math.floor(Math.random() * syms.length)];
+    p.style.cssText = `left:${Math.random()*100}vw;font-size:${9+Math.random()*13}px;
+      animation-duration:${12+Math.random()*18}s;animation-delay:${Math.random()*16}s`;
+    pc.appendChild(p);
+  }
+
+  /* Abrir carta */
+  let opened = false;
+  function openLetter() {
+    if (opened) return;
+    opened = true;
+    // animar sobre
+    document.getElementById('env-flap').classList.add('flap-open');
+    document.getElementById('env-seal').classList.add('seal-hide');
+    setTimeout(() => {
+      document.getElementById('start-screen').classList.add('hidden');
+      const lc = document.getElementById('letter-container');
+      lc.classList.add('visible');
+      setTimeout(revealParagraphs, 500);
+    }, 700);
+  }
+  document.getElementById('open-btn').addEventListener('click', openLetter);
+  document.getElementById('envelope-btn').addEventListener('click', openLetter);
+
+  /* Revelar párrafos */
+  function revealParagraphs() {
+    const ps = document.querySelectorAll('.letter-body p');
+    ps.forEach((p, i) => setTimeout(() => p.classList.add('revealed'), i * 380));
+  }
+
+  /* Cualidades */
+  const qualities = [
+    { icon:'💪', title:'Tu fortaleza',   desc:'Enfrentas todo sin rendirte jamás.' },
+    { icon:'⭐', title:'Tu determinación', desc:'Lo que te propones, lo logras siempre.' },
+    { icon:'🌟', title:'Tu luz',          desc:'Iluminas todo lo que tocas.' },
+    { icon:'🧠', title:'Tu inteligencia', desc:'Me asombras con tu manera de pensar.' },
+    { icon:'🌺', title:'Tu corazón',      desc:'Amas con una intensidad única.' },
+    { icon:'✨', title:'Lo especial que eres', desc:'No hay nadie como tú en el mundo.' },
+  ];
+  const qg = document.getElementById('qualities-grid');
+  qualities.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'quality-card';
+    card.innerHTML = `
+      <span class="qicon">${q.icon}</span>
+      <span class="qtext"><strong>${q.title}</strong>${q.desc}</span>
+      <span class="pop-heart">💗</span>`;
+    card.addEventListener('click', () => {
+      card.classList.toggle('tapped');
+      spawnHeart(card);
+    });
+    qg.appendChild(card);
+  });
+
+  /* Corazón interactivo */
+  let clicks = 0;
+  const msgs = [
+    'Te amo 💗',
+    'Te amo más 💕',
+    'Te amo muchísimo 🥰',
+    'No tengo palabras para cuánto... 💞',
+    'Infinito × infinito 💝',
+    '∞ ❤️‍🔥 ∞',
+  ];
+  const heart = document.getElementById('big-heart');
+  const counter = document.getElementById('heart-counter');
+  heart.addEventListener('click', () => {
+    clicks++;
+    heart.style.transform = 'scale(1.55)';
+    setTimeout(() => heart.style.transform = '', 220);
+    spawnHeart(heart);
+    counter.textContent = msgs[Math.min(clicks-1, msgs.length-1)];
+    counter.classList.add('show');
+  });
+
+  /* Mini corazones voladores */
+  function spawnHeart(el) {
+    const rect = el.getBoundingClientRect();
+    const span = document.createElement('span');
+    span.textContent = ['💗','💕','💖','💞','❤️'][Math.floor(Math.random()*5)];
+    span.style.cssText = `
+      position:fixed;left:${rect.left+rect.width/2}px;top:${rect.top+rect.height/2}px;
+      font-size:${1.1+Math.random()*.7}rem;pointer-events:none;z-index:300;
+      animation:popUp .85s ease forwards;`;
+    document.body.appendChild(span);
+    setTimeout(() => span.remove(), 900);
+  }
+
+  /* Confetti */
+  const colors = ['#d4465a','#f7c5cc','#c9973a','#f0a0b0','#fff9','#fce8ee'];
+  function launchConfetti() {
+    for (let i = 0; i < 70; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti-piece';
+      c.style.cssText = `left:${Math.random()*100}vw;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        animation-duration:${1.8+Math.random()*2.2}s;
+        animation-delay:${Math.random()*.9}s;
+        transform:rotate(${Math.random()*360}deg)`;
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4200);
+    }
+  }
+
+  /* Botón final */
+  const finalMsgs = [
+    '💌 Recibido con todo el amor del mundo. Te amo.',
+    '🌹 Y yo a ti, hoy, mañana y siempre.',
+    '✨ Eres lo más bonito que me ha pasado.',
+    '💕 Gracias por ser tú. Por existir. Por estar.',
+    '❤️‍🔥 Sin rendirme. Siempre contigo.',
+  ];
+  let mi = 0;
+  document.getElementById('final-btn').addEventListener('click', function() {
+    launchConfetti();
+    const mm = document.getElementById('magic-message');
+    mm.textContent = finalMsgs[mi % finalMsgs.length];
+    mm.classList.remove('show');
+    void mm.offsetWidth;
+    mm.classList.add('show');
+    mi++;
+    this.textContent = '💖 Una vez más';
+  });
+
+  /* Keyframe dinámico */
+  const s = document.createElement('style');
+  s.textContent = `@keyframes popUp {
+    0%   { transform:translateY(0) scale(1);   opacity:1; }
+    100% { transform:translateY(-65px) scale(.4); opacity:0; }
+  }`;
+  document.head.appendChild(s);
+</script>
 </body>
 </html>
