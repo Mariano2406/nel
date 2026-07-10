@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Ti 💖</title>
+
+<style>
+body{
+    margin:0;
+    background:#fff8f0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    flex-direction:column;
+    font-family: Arial, sans-serif;
+    overflow:hidden;
+}
+
+.ramo{
+    position:relative;
+    width:300px;
+    height:300px;
+}
+
+.flor{
+    position:absolute;
+    width:100px;
+    height:100px;
+    animation: aparecer 2s ease forwards;
+    opacity:0;
+}
+
+@keyframes aparecer{
+    to{opacity:1; transform:scale(1);}
+}
+
+.petalo{
+    position:absolute;
+    width:25px;
+    height:50px;
+    background:white;
+    border-radius:50px;
+    top:25px;
+    left:37px;
+    transform-origin:50% 75%;
+}
+
+.centro{
+    position:absolute;
+    width:40px;
+    height:40px;
+    background:#ffcc00;
+    border-radius:50%;
+    top:30px;
+    left:30px;
+    z-index:2;
+}
+
+.tallo{
+    position:absolute;
+    width:4px;
+    height:120px;
+    background:green;
+    top:80px;
+    left:48px;
+}
+
+.mensaje{
+    margin-top:30px;
+    font-size:clamp(18px, 4vw, 28px);
+    text-align:center;
+    color:#d63384;
+    opacity:0;
+    animation: mostrarMensaje 3s ease forwards;
+    animation-delay:4s;
+}
+
+@keyframes mostrarMensaje{
+    to{opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="ramo" id="ramo"></div>
+
+<div class="mensaje">
+    Eres lo mejor que me ha pasado 💖<br>
+    Te amo profundamente.<br>
+    Quiero pasar mucho tiempo contigo 🌸
+</div>
+
+<script>
+function crearFlor(x, y, delay){
+    const flor = document.createElement("div");
+    flor.classList.add("flor");
+    flor.style.left = x + "px";
+    flor.style.top = y + "px";
+    flor.style.animationDelay = delay + "s";
+
+    for(let i=0;i<8;i++){
+        const petalo = document.createElement("div");
+        petalo.classList.add("petalo");
+        petalo.style.transform = `rotate(${i*45}deg)`;
+        flor.appendChild(petalo);
+    }
+
+    const centro = document.createElement("div");
+    centro.classList.add("centro");
+    flor.appendChild(centro);
+
+    const tallo = document.createElement("div");
+    tallo.classList.add("tallo");
+    flor.appendChild(tallo);
+
+    document.getElementById("ramo").appendChild(flor);
+}
+
+crearFlor(50,20,0);
+crearFlor(120,0,1);
+crearFlor(180,30,2);
+crearFlor(90,60,3);
+</script>
+
+</body>
+</html>
