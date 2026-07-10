@@ -54,23 +54,6 @@
   }
   .btn:hover{ border-color:var(--gold); box-shadow:0 0 28px rgba(255,180,84,0.35); transform:translateY(-1px); }
 
-  details.customize{ margin-top:30px; width:100%; max-width:420px; }
-  details.customize summary{
-    cursor:pointer; font-size:12px; letter-spacing:0.12em; color:#a89bd6; text-transform:uppercase;
-    list-style:none; text-align:center;
-  }
-  details.customize summary::-webkit-details-marker{ display:none; }
-  .customize-panel{
-    margin-top:16px; padding:18px 20px; border-radius:14px;
-    background:rgba(20,14,40,0.55); border:1px solid rgba(255,255,255,0.08);
-    text-align:left; font-size:13px; color:#cfc8ee;
-  }
-  .field{ margin-bottom:14px; }
-  .field:last-child{ margin-bottom:0; }
-  .field label{ display:block; margin-bottom:6px; font-size:11px; letter-spacing:0.08em; color:#9a8fc4; text-transform:uppercase; }
-  .field input[type=file]{ width:100%; font-size:12px; color:#cfc8ee; }
-  .hint{ font-size:11px; color:#7d72a8; margin-top:5px; line-height:1.4; }
-
   #hud{
     position:fixed; top:0; left:0; right:0; z-index:10;
     display:flex; justify-content:space-between; align-items:flex-start;
@@ -79,14 +62,6 @@
   }
   #hud.show{ opacity:1; }
   #hud .title{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:15px; color:#cfc8ee; opacity:0.8; }
-  #hud .controls{ pointer-events:all; display:flex; gap:10px; }
-  .icon-btn{
-    width:38px; height:38px; border-radius:50%; border:1px solid rgba(255,255,255,0.18);
-    background:rgba(10,6,22,0.55); backdrop-filter:blur(6px); color:var(--starlight);
-    cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:15px;
-    transition:all 0.25s ease;
-  }
-  .icon-btn:hover{ border-color:var(--gold); color:var(--gold); }
 
   #caption{
     position:fixed; bottom:26px; left:50%; transform:translateX(-50%); z-index:10;
@@ -154,13 +129,10 @@
 
 <div id="hud">
   <div class="title">Galería Eterna</div>
-  <div class="controls">
-    <button class="icon-btn" id="btnMute" title="Silenciar / activar música">♪</button>
-  </div>
 </div>
 
 <div id="caption"></div>
-<div id="hint-drag">arrastra para orbitar · rueda para acercar<br>toca una foto para leer el mensaje</div>
+<div id="hint-drag">arrastra para orbitar · pellizca o usa la rueda para acercar<br>toca una foto para leer el mensaje</div>
 
 <div id="overlay">
   <div class="eyebrow">Un recuerdo, suspendido en el cosmos</div>
@@ -169,19 +141,6 @@
   Mereces todo lo bueno que te pasa. Eres un ser de luz, nacida para brillar
   incluso en la oscuridad.</p>
   <button class="btn" id="btnStart">Entrar a la galaxia</button>
-
-  <details class="customize">
-    <summary>Personalizar música (opcional)</summary>
-    <div class="customize-panel">
-      <div class="field">
-        <label>Música de fondo (tu archivo, ej. mp3)</label>
-        <input type="file" id="inputAudio" accept="audio/*">
-        <div class="hint">Por derechos de autor no puedo incluir canciones existentes
-        directamente, pero si subes aquí tu propio archivo de audio, sonará de fondo
-        dentro de la galería.</div>
-      </div>
-    </div>
-  </details>
 </div>
 
 <div id="photoModal">
@@ -192,8 +151,6 @@
     <button class="modal-close" id="modalClose">Cerrar</button>
   </div>
 </div>
-
-<audio id="bgm" loop></audio>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -247,11 +204,11 @@ const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0x05030d, 0.012);
 
 const camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.1, 400);
-let camDistance = 13, camAzimuth = 0.0, camElevation = 0.34;
+let camDistance = isMobile ? 8.5 : 13, camAzimuth = 0.0, camElevation = 0.34;
 
 function updateCamera(){
   camElevation = Math.max(0.08, Math.min(1.35, camElevation));
-  camDistance = Math.max(5, Math.min(34, camDistance));
+  camDistance = Math.max(3, Math.min(34, camDistance));
   camera.position.set(
     camDistance * Math.sin(camAzimuth) * Math.cos(camElevation),
     camDistance * Math.sin(camElevation) + 1.2,
@@ -496,11 +453,38 @@ let isPointerDown=false, dragging=false, startX=0, startY=0, lastX=0, lastY=0, a
 const raycaster = new THREE.Raycaster();
 const pointerNDC = new THREE.Vector2();
 
+const activePointers = new Map();
+let pinchStartDist = null, pinchStartCamDistance = camDistance;
+
+function pointsArray(){ return Array.from(activePointers.values()); }
+function pointerDist(p1,p2){ return Math.hypot(p1.x-p2.x, p1.y-p2.y); }
+
 canvas.addEventListener('pointerdown', e=>{
-  isPointerDown = true; dragging = false;
-  startX = lastX = e.clientX; startY = lastY = e.clientY;
+  activePointers.set(e.pointerId, { x:e.clientX, y:e.clientY });
+
+  if(activePointers.size === 2){
+    isPointerDown = false; dragging = false;
+    const pts = pointsArray();
+    pinchStartDist = pointerDist(pts[0], pts[1]);
+    pinchStartCamDistance = camDistance;
+    autoRotate = false;
+  } else if(activePointers.size === 1){
+    isPointerDown = true; dragging = false;
+    startX = lastX = e.clientX; startY = lastY = e.clientY;
+  }
 });
 window.addEventListener('pointermove', e=>{
+  if(!activePointers.has(e.pointerId)) return;
+  activePointers.set(e.pointerId, { x:e.clientX, y:e.clientY });
+
+  if(activePointers.size === 2 && pinchStartDist){
+    const pts = pointsArray();
+    const dist = pointerDist(pts[0], pts[1]);
+    camDistance = pinchStartCamDistance * (pinchStartDist / dist);
+    updateCamera();
+    return;
+  }
+
   if(!isPointerDown) return;
   const dx = e.clientX-lastX, dy = e.clientY-lastY;
   const totalMove = Math.hypot(e.clientX-startX, e.clientY-startY);
@@ -512,10 +496,14 @@ window.addEventListener('pointermove', e=>{
   }
   lastX = e.clientX; lastY = e.clientY;
 });
-window.addEventListener('pointerup', e=>{
-  if(isPointerDown && !dragging){ handleTap(e.clientX, e.clientY); }
-  isPointerDown = false; dragging = false;
-});
+function releasePointer(e){
+  activePointers.delete(e.pointerId);
+  if(activePointers.size < 2) pinchStartDist = null;
+  if(isPointerDown && !dragging && activePointers.size === 0){ handleTap(e.clientX, e.clientY); }
+  if(activePointers.size === 0){ isPointerDown = false; dragging = false; }
+}
+window.addEventListener('pointerup', releasePointer);
+window.addEventListener('pointercancel', releasePointer);
 
 function handleTap(x,y){
   pointerNDC.x = (x/window.innerWidth)*2-1;
@@ -622,28 +610,8 @@ const overlay = document.getElementById('overlay');
 const hud = document.getElementById('hud');
 const hintDrag = document.getElementById('hint-drag');
 const btnStart = document.getElementById('btnStart');
-const btnMute = document.getElementById('btnMute');
-const bgm = document.getElementById('bgm');
-const inputAudio = document.getElementById('inputAudio');
-
-let customAudioUrl = null;
-inputAudio.addEventListener('change', e=>{
-  if(e.target.files[0]) customAudioUrl = URL.createObjectURL(e.target.files[0]);
-});
-
-let muted = false;
-btnMute.addEventListener('click', ()=>{
-  muted = !muted;
-  bgm.muted = muted;
-  btnMute.textContent = muted ? '✕' : '♪';
-});
 
 btnStart.addEventListener('click', ()=>{
-  if(customAudioUrl){
-    bgm.src = customAudioUrl;
-    bgm.volume = 0.55;
-    bgm.play().catch(()=>{});
-  }
   overlay.classList.add('hidden');
   hud.classList.add('show');
   hintDrag.classList.add('show');
